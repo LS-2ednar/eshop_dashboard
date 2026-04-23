@@ -1,0 +1,64 @@
+table stores
+	lineageTag: b7525f21-e933-4df6-b954-b02318008fe9
+
+	column store_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 65d70313-22ca-47e6-9603-6ec78b937014
+		summarizeBy: none
+		sourceColumn: store_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column store_name
+		dataType: string
+		lineageTag: 85807775-c99c-4874-8ea1-608bb8c741d7
+		summarizeBy: none
+		sourceColumn: store_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column store_type
+		dataType: string
+		lineageTag: 52edba51-50df-4e43-93c2-3fc47276ab90
+		summarizeBy: none
+		sourceColumn: store_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column store_open_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: baf52cdb-5747-419c-8386-10772ec41ad6
+		summarizeBy: none
+		sourceColumn: store_open_date
+
+		variation Variation
+			isDefault
+			relationship: 31b41cf1-f38b-41ed-af23-767ebb07e3d3
+			defaultHierarchy: LocalDateTable_f6492c24-55c8-4019-b932-7dd19aa5ed35.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column store_location
+		dataType: string
+		lineageTag: 8676a016-f93d-4651-acae-201add4e13c5
+		summarizeBy: none
+		sourceColumn: store_location
+
+		annotation SummarizationSetBy = Automatic
+
+	partition stores = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("C:\Users\Lukas Schaub\Desktop\eshop_dashboard\stores.csv"),[Delimiter=",", Columns=5, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"store_id", Int64.Type}, {"store_name", type text}, {"store_type", type text}, {"store_open_date", type date}, {"store_location", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+
