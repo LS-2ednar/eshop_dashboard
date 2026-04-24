@@ -114,39 +114,6 @@
   "filterConfig": {
     "filters": [
       {
-        "name": "320bd02de176b05e6e8a",
-        "field": {
-          "Column": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "customers"
-              }
-            },
-            "Property": "customer_payment_type"
-          }
-        },
-        "type": "Categorical"
-      },
-      {
-        "name": "0ee525dba039a73a3ea1",
-        "field": {
-          "Aggregation": {
-            "Expression": {
-              "Column": {
-                "Expression": {
-                  "SourceRef": {
-                    "Entity": "customers"
-                  }
-                },
-                "Property": "customer_id"
-              }
-            },
-            "Function": 5
-          }
-        },
-        "type": "Advanced"
-      },
-      {
         "name": "dc73eaad7601180731e5",
         "field": {
           "Column": {

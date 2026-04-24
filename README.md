@@ -1,3 +1,3 @@
-This is a test for the .pbip format. The report uses artificial data.
+This is a test for the .pbip format. It uses different csv files as datasources.
 
-Continue working on CH5.L6
+

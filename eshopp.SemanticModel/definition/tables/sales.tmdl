@@ -6,6 +6,24 @@ table sales
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
+	measure total_units_sold = SUM(sales[sale_quantity])
+		formatString: 0
+		lineageTag: f71b156a-32ea-4308-a995-0adcdc1f031e
+
+	measure discounted_revenue = SUMX(sales, sales[sale_quantity] * sales[discounted_price])
+		lineageTag: 37fc12b0-8cec-49c4-8f54-35d2e64d66ea
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure revenue_in_feb =
+			CALCULATE(
+			    [discounted_revenue],
+			    DATESINPERIOD(dates[date], DATE(2025, 2, 1), 27, DAY)
+			)
+		lineageTag: c6da1041-8092-4eaa-94bd-328d8a6d75bf
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
 	column sale_id
 		dataType: int64
 		formatString: 0
@@ -72,7 +90,7 @@ table sales
 
 	column price = sales[sale_quantity] * RELATED(products[product_list_price])
 		lineageTag: bb00adc3-163d-46e2-a94c-3148ee399ca9
-		summarizeBy: sum
+		summarizeBy: none
 
 		annotation SummarizationSetBy = Automatic
 
@@ -85,6 +103,25 @@ table sales
 		annotation SummarizationSetBy = Automatic
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column bulk_order = IF(sales[sale_quantity] > 3, True(), False())
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: b739424b-e37e-441e-b62e-5ef2918ec789
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column order_size =
+			SWITCH(
+			    TRUE,
+			    sales[discounted_price] < 100, "Tiny",
+			    sales[discounted_price] < 200, "Mid",
+			    "Massive"
+			)
+		lineageTag: 7f5a4218-6428-4874-b727-ab2b9770d2f0
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
 
 	partition sales = m
 		mode: import
